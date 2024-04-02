@@ -75,7 +75,6 @@ class ArraysTests {
 	}
 	@Test 
 	void removeIfTest() {
-		//TODO
 		
 		Integer[] onlyOdd = {-3,23,41,-7};
 		assertArrayEquals(onlyOdd,Arrays.removeIf(number, 

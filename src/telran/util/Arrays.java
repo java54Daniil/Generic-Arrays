@@ -58,24 +58,19 @@ public class Arrays {
 		//returns exactly what the standard binarySearch does
 		//if there are several equaled elements 
 		//no guarantee that being return index is one to first occurrence
-		int left =0;
-		int right = array.length -1;
-		int result =-1;
-		while(left<= right) {
-			int middle =(left + right )/2;
-	
-			int compResult =comp.compare(array[middle], key);
-			if(compResult ==0) {
-				result = middle;
-				left = middle +1;
-				right = array.length+1;
-			}else if(compResult <0) {
-				left = middle+1;
-			}else {
-				right = middle -1;
+		int left = 0;
+		int right = array.length - 1;
+		int middle = (left + right) / 2;
+		int res = -1;
+		while(left <= right && (res = comp.compare(key, array[middle])) != 0) {
+			if (res > 0) {
+				left = middle + 1;
+			} else {
+				right = middle - 1;
 			}
+			middle = (left + right) / 2;
 		}
-		return result;
+		return left > right ? -(left + 1) : middle;
 	}
 	public static <T> T[] search (T[] array,Predicate<T> predicate) {
 		//Impossible to allocate memory for generic array
@@ -92,14 +87,18 @@ public class Arrays {
 	//HW
 	public static <T> T[] removeIf(T[] array,Predicate<T> predicate){
 		//removes all elements of array matching a given predicate
-		T[] copyArray =  java.util.Arrays.copyOf(array, array.length);
+	/*	T[] copyArray =  java.util.Arrays.copyOf(array, array.length);
 		int index = 0;
 		for(int i=0;i <array.length;i++) {
 			if(!predicate.test(array[i])) {
 				copyArray[index++] =array[i];    
 			}
 				
-		}
+		/
+		
 		return java.util.Arrays.copyOf(copyArray, index);
+	*/
+		return Arrays.search(array, predicate.negate());
+	
 	}
 }
