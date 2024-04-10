@@ -101,4 +101,29 @@ public class Arrays {
 		return Arrays.search(array, predicate.negate());
 	
 	}
+	public static <T> T[] add(T[] array, T element) {
+	T[] result  = java.util.Arrays.copyOf(array, array.length+1);
+		result[array.length] =element; 
+		return result;
+	}
+	
+	public static <T extends Comparable<? super T>> void bubbleSort(T[] array) {
+		//research:write the code based on the existing one of bubbleSort with comparator
+		boolean swapped = true;
+	    for (int i = 0; i < array.length - 1 && swapped; i++) {
+	        swapped = false;
+	        for (int j = 0; j < array.length - i - 1; j++) {
+	            if (array[j].compareTo(array[j + 1]) > 0) {
+	                T temp = array[j];
+	                array[j] = array[j + 1];
+	                array[j + 1] = temp;
+	                swapped = true;
+	            }
+	        }
+	    }
+	}
+
+	public static <T> T[] copy(T[] array ) {
+		return java.util.Arrays.copyOf(array, array.length);
+	}
 }

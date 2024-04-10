@@ -3,6 +3,7 @@ package telran.util.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +39,7 @@ class ArraysTests {
 		Comparator<Integer> evenOddComp =ArraysTests::evenOddComparator;
 		Arrays.bubbleSort(numbersCopy, evenOddComp);
 		assertArrayEquals(expected, numbersCopy);
+		
 	};
 	
 	static int evenOddComparator(Integer num1,Integer num2) {
@@ -65,13 +67,21 @@ class ArraysTests {
 	//HW
 	@Test 
 	void binarySearchTest() {
-		Comparator<Integer> compare = 
+	/*	Comparator<Integer> compare = 
 				(o1,o2) ->{return Integer.compare(o1,o2);};
 				Integer[] array = {1,2,3,4,5,6};
 				int found = Arrays.binarySearch(array, 2, compare);
 				assertEquals(1,found);
 				int notFound = Arrays.binarySearch(array, 10, compare);
-				assertEquals(-1,notFound);
+				assertEquals(-1,notFound);*/
+		Integer[] sortedNumbers = {10, 20, 30, 40, 50};
+		Comparator<Integer> comp = Integer::compare;
+		assertEquals(0, Arrays.binarySearch(sortedNumbers, 10, comp));
+		assertEquals(4, Arrays.binarySearch(sortedNumbers, 50, comp));
+		assertEquals(2, Arrays.binarySearch(sortedNumbers, 30, comp));
+		assertEquals(-1, Arrays.binarySearch(sortedNumbers, 5, comp));
+		assertEquals(-4, Arrays.binarySearch(sortedNumbers, 35, comp));
+		assertEquals(-6, Arrays.binarySearch(sortedNumbers, 55, comp));
 	}
 	@Test 
 	void removeIfTest() {
@@ -86,4 +96,79 @@ class ArraysTests {
 		assertArrayEquals (notInRange,Arrays.removeIf(number, a->a>2000));
 		
 	}
+	@Test
+	void addTest() {
+		Integer[] expectecd = {100,-3,23,4,8,41,56,-7,150};
+		assertArrayEquals(expectecd, Arrays.add(number, 150));
+	}
+	@Test
+	void personSortTest() {
+		Person prs1 = new Person(123l, 1985);
+		Person prs2 = new Person(120, 2000);
+		Person prs3 = new Person(128, 1999);
+		Person[] persons = {
+			prs1,prs2,prs3
+		};
+		Arrays.bubbleSort(persons);
+		Person[] expected = {
+				new Person(120, 2000),
+				new Person(123, 1985),
+				new Person(128, 1999)
+				};
+		Person[] expectedAge = {
+				new Person(120, 2000),
+				new Person(128, 1999),
+				new Person(123, 1985)
+				};
+		assertArrayEquals(expected, persons);
+		Arrays.bubbleSort(persons,
+				(p1,p2)->Integer.compare(p2.birthYear, p1.birthYear));
+		assertArrayEquals(expectedAge, persons);
+	}
+	class Person implements Comparable<Person> {
+		long id;
+		int birthYear;
+		public Person(long id ,int birthYear) {
+			this.id= id;
+			this.birthYear=birthYear;
+		}
+		@Override
+		public int compareTo(Person o) {
+			return Long.compare(id, o.id);
+		}
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getEnclosingInstance().hashCode();
+			result = prime * result + Objects.hash(birthYear, id);
+			return result;
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Person other = (Person) obj;
+			if (!getEnclosingInstance().equals(other.getEnclosingInstance()))
+				return false;
+			return birthYear == other.birthYear && id == other.id;
+		}
+		private ArraysTests getEnclosingInstance() {
+			return ArraysTests.this;
+		}
+		
+	}
+	@Test
+	void bublleSortWithoutComparatorTest() {
+		Integer[] expected = {4,8,56,100,41,23,-3,-7};
+		Integer[] numbersCopy = java.util.Arrays.copyOf(number, number.length);
+		Comparator<Integer> evenOddComp =ArraysTests::evenOddComparator;
+		Arrays.bubbleSort(numbersCopy, evenOddComp);
+		assertArrayEquals(expected, numbersCopy);
+		
+	};
 }
