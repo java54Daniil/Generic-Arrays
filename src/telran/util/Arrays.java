@@ -32,7 +32,6 @@ public class Arrays {
 
 		return res;
 	}
-	//HW
 	public static <T> void bubbleSort(T[] array, Comparator<T> comp) {
 		boolean swapped = true;
 		for (int i = 0; i < array.length - 1 && swapped; i++) {
@@ -47,7 +46,11 @@ public class Arrays {
 	        }
 		}
 	}
-	//HW
+	@SuppressWarnings("unchecked")
+	public static <T> void bubbleSort(T[] array) {
+		bubbleSort(array, (Comparator<T>)Comparator.naturalOrder());
+	}
+
 	public static<T> int binarySearch(T[] array,T key, Comparator<T> comp) {
 		// left index = 0
 		// right index = array.length -1
@@ -87,17 +90,6 @@ public class Arrays {
 	//HW
 	public static <T> T[] removeIf(T[] array,Predicate<T> predicate){
 		//removes all elements of array matching a given predicate
-	/*	T[] copyArray =  java.util.Arrays.copyOf(array, array.length);
-		int index = 0;
-		for(int i=0;i <array.length;i++) {
-			if(!predicate.test(array[i])) {
-				copyArray[index++] =array[i];    
-			}
-				
-		/
-		
-		return java.util.Arrays.copyOf(copyArray, index);
-	*/
 		return Arrays.search(array, predicate.negate());
 	
 	}
@@ -125,5 +117,19 @@ public class Arrays {
 
 	public static <T> T[] copy(T[] array ) {
 		return java.util.Arrays.copyOf(array, array.length);
+	}
+	public static <T> T[] insert(T[] array, int index, T element) {
+		T[] result = java.util.Arrays.copyOf(array, array.length + 1);
+		System.arraycopy(array, index, result, index + 1, array.length - index);
+		result[index] = element;
+		return result;
+	}
+	public static <T> T[] insertSorted(T[] array, T element,
+			Comparator<T> comp) {
+		int index = binarySearch(array, element, comp);
+		if (index < 0) {
+			index = - (index + 1);
+		}
+		return insert(array, index, element);
 	}
 }

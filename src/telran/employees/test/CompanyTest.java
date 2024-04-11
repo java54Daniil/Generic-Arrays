@@ -2,6 +2,7 @@ package telran.employees.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ class CompanyTest {
 	void testAddEmplloee() {
 		
 		company.addEmplloee(empl4);
-		 assertEquals(empl4, company.getEemployees(ID4));
+		 assertEquals(empl4, company.getEmployee(ID4));
 		assertThrowsExactly(IllegalStateException.class,
 				() ->company.addEmplloee(empl1) );
 		
@@ -43,14 +44,14 @@ class CompanyTest {
 
 	@Test
 	void testGetEemployees() {
-		assertEquals(empl1, company.getEemployees(ID1));
-		assertEquals(null, company.getEemployees(ID4));
+		assertEquals(empl1, company.getEmployee(ID1));
+		assertEquals(null, company.getEmployee(ID4));
 	}
 
 	@Test
 	void testRemoveEmployee() {
 		company.removeEmployee(ID1);
-		assertNull(company.getEemployees(1));
+		assertNull(company.getEmployee(1));
 		assertThrowsExactly(NoSuchElementException.class,
 				() ->company.removeEmployee(ID4) );
 	}
@@ -64,7 +65,16 @@ class CompanyTest {
 	}
 	@Test
 	void testIterator() {
-		//TODO
+		
+			Employee[] expected = {empl2, empl1, empl3};
+			Iterator<Employee> it = company.iterator();
+			int index = 0;
+			while(it.hasNext()) {
+				assertEquals(expected[index++], it.next());
+			}
+			assertEquals(expected.length, index);
+			assertThrowsExactly(NoSuchElementException.class, it::next);
+		
 	}
 
 }

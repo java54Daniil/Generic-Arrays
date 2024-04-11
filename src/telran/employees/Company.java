@@ -1,71 +1,42 @@
 package telran.employees;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import telran.util.Arrays;
 //SO far we don't consider optimization
-public class Company implements Iterable{
+public class Company implements Iterable<Employee>{
 	private Employee[] employees;
 	public void addEmplloee(Employee empl) {
 		// adds new Employee to array of employees
 		//if employee with id equal to id of employee exist throw IleegalStateExpection
-		for(Employee employee:employees) {
-			if(employee.getId() == empl.getId()) {
-				throw new IllegalStateException("Employee already exist");
-			}
+		long id = empl.getId();
+		if(getEmployee(id) != null) {
+			throw new IllegalStateException(String.format("employee with id %d already exists",
+					id));
 		}
-		 employees =Arrays.add(employees, empl);
+		employees = Arrays.insertSorted(employees, empl, Comparator.naturalOrder());
 	}
-	public Employee getEemployees(long id) {
+	public Employee getEmployee(long id) {
 		//data about an employee with a given id value
 		//if the company doesn't have such employee, then return null
-		Employee result =null;
-		for (Employee employee :employees) {
-			if (employee.getId()==id) {
-				result =employee;
-			}
-		}
-		return result;
+		int index = Arrays.binarySearch(employees,  new Employee(id, 0, null), Comparable::compareTo);
+		return index < 0 ? null : employees[index];
 		
 	}
 	public Employee removeEmployee(long id) {
 		//removes from the company an employee with a given id
 		//if such employee doesn't exist, throw NoSuchElementException
 		//returns reference to being removed employee
-		 /*boolean found=false;
-		  for (int i = 0; i < employees.length||found !=true; i++) {
-		        if (employees[i].getId() == id&& employees[i]!=null) {
-		            removedEmployee = employees[i];
-		            for (int j = i; j < employees.length - 1; j++) {
-		                employees[j] = employees[j + 1];
-		            }
-		            employees[employees.length - 1] = null;
-		            found =true;
-		        }
-		    }
-		  if(removedEmployee ==null) {
-			  throw new NoSuchElementException("Employee with ID"+id+"dosent exist");
-		  }*/
-		 Employee removedEmployee =null;
-		int index = -1;
-	    for (int i = 0; i < employees.length; i++) {
-	        if (employees[i] != null && employees[i].getId() == id) {
-	            index = i;
-	            removedEmployee = employees[i];
-	        }
-	    }
-	    if (index != -1) {
-	        Employee[] newEmployees = new Employee[employees.length - 1];
-	        System.arraycopy(employees, 0, newEmployees, 0, index);
-	        System.arraycopy(employees, index + 1, newEmployees, index, employees.length - index - 1);
-	        employees = newEmployees;
-	    } 
-	    if(removedEmployee ==null) {
-	        throw new NoSuchElementException("Employee with ID " + id + " doesn't exist");
-	    }
-
-		   return removedEmployee;
+		 
+		Employee result = getEmployee(id);
+		if(result == null) {
+			throw new NoSuchElementException
+			(String.format("Employee with id %d doesn't exist", id));
+		}
+		employees = Arrays.removeIf(employees, e -> e.getId() == id);
+		return result;
 	}
 	public int getDepartmentBudget (String department) {
 		// return sum of  basic salary values for all employees of a given department
@@ -81,6 +52,7 @@ public class Company implements Iterable{
 	}
 	public Company (Employee[] employees) {
 		this.employees = Arrays.copy(employees);
+		Arrays.bubbleSort(this.employees);
 	}
 	
 	@Override
@@ -102,9 +74,7 @@ public class Company implements Iterable{
 			if(!hasNext()) {
 				throw new NoSuchElementException();
 			}
-		Employee employee =employees[index];
-		index++;
-			return employee;
+			return employees[index++];
 		}
 		
 	}
