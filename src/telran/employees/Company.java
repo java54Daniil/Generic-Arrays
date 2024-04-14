@@ -39,12 +39,13 @@ public class Company implements Iterable<Employee>{
 		return result;
 	}
 	public int getDepartmentBudget (String department) {
+		//should be updated
 		// return sum of  basic salary values for all employees of a given department
 		//if employees of  a given department don't exist   returns 0
 		int budget = 0;
 	    for (Employee employee : employees) {
 	    	if(employee.getDeepartment().equals(department)) {
-	    		budget+=employee.getBasicSalary();
+	    		budget+=employee.computeSalary();
 	    	}
 	    }
 		return budget;
@@ -59,6 +60,33 @@ public class Company implements Iterable<Employee>{
 	public Iterator<Employee> iterator() {
 		
 		return new CompanyIterator();
+	}
+	public String[] getDepartments() {
+		String[] departments = new String[employees.length];
+        int index = 0;
+        for (Employee employee : employees) {
+            String department = employee.getDeepartment();
+            boolean found = false;
+            int i  =0;
+            while ( i < index&&!found ) {
+                if (departments[i].equals(department)) {
+                    found = true;
+                }
+                else {
+                	i++;
+                }
+            }
+            if (!found) {
+                departments[index] = department;
+                index++;
+            }
+        }
+        
+        String[] uniqueDepartments = new String[index];
+       System.arraycopy(departments, 0, uniqueDepartments, 0, index);
+  
+
+        return uniqueDepartments;
 	}
 	private class CompanyIterator implements Iterator<Employee> {
 
