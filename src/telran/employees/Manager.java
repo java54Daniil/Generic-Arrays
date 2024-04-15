@@ -9,12 +9,6 @@ public class Manager extends Employee {
 		
 	}
 	
-	public float getFactor() {
-		return factor;
-	}
-	public void setFactor(float factor) {
-		this.factor = factor;
-	}
 	@Override
 	public int computeSalary() {
 		return (int)(super.computeSalary() *factor);

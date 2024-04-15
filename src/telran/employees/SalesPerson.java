@@ -11,18 +11,7 @@ public class SalesPerson extends WageEmployee {
 		this.precent = precent;
 		this.sales = sales;
 	}
-	public float getPrecent() {
-		return precent;
-	}
-	public void setPrecent(float precent) {
-		this.precent = precent;
-	}
-	public long getSales() {
-		return sales;
-	}
-	public void setSales(long sales) {
-		this.sales = sales;
-	}
+	
 	@Override
 	public int computeSalary() {
 		return super.computeSalary() +(int)(sales*precent/100) ;
